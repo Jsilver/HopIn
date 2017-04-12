@@ -127,7 +127,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        return email.contains("@umbc.edu");
+        //TODO: Now uses email ID instead of full email string, so should check with internal DB or webservice to verify authenticity
+        //return email.contains("@umbc.edu");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
