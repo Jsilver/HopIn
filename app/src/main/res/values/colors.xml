@@ -9,4 +9,9 @@
     <color name="Red">#FF0000</color>
     <color name="White">#FFFFFF</color>
     <color name="colorLoginBackground">#E3E3E3</color>
+    <color name="colorLoginBackground2">#006666</color>
+    <color name="colorLoginBackground3">#0099FF</color>
+    <color name="colorLoginBackground4">#E3E3E3</color>
+    <color name="colorLoginBackground5">#494949</color>
+    <color name="colorLoginBackground6">#1C1C54</color>
 </resources>

@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorLoginBackground"
+    android:background="@color/colorLoginBackground5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -36,12 +36,12 @@
 
             <TextView
                 android:id="@+id/textview_login_title"
-                android:text="@string/app_name"
+                android:text="Welcome to Hop In!"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/White"
                 android:layout_gravity="center_horizontal"
-                style="?android:textAppearanceMedium" />
+                style="?android:textAppearanceLarge" />
 
             <ImageView
                 android:id="@+id/imageview_login_app_icon"
@@ -58,10 +58,12 @@
 
                 <EditText
                     android:id="@+id/edittext_login_email"
+                    android:textColor="@color/White"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:hint="@string/prompt_email"
+                    android:textColorHint="@color/White"
                     android:ems="10"
                     android:layout_weight="1" />
 
@@ -69,21 +71,24 @@
                     android:id="@+id/textview_login_email"
                     android:text=" @umbc.edu"
                     android:textSize="18sp"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/White"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:textColorHint="@color/White"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/button_login_password"
+                    android:id="@+id/edittext_login_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/White"
                     android:hint="@string/prompt_password"
+                    android:textColorHint="@color/White"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
