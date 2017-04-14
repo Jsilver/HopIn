@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorLoginBackground7"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="104dp"
+        android:textColor="@color/White"
+        android:textAlignment="center"
+        android:text="How Many Seats Are Available Today ?"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/textView7"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/spinner"
+        android:layout_marginBottom="55dp"
+        android:text="Confirm" />
+
+</RelativeLayout>
