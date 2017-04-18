@@ -30,7 +30,7 @@
             android:label="HopIn" />
         <activity android:name=".PhoneActivity" />
         <activity android:name=".AddressActivity" />
-        <activity android:name=".UserStatusActivity"></activity>
+        <activity android:name=".UsageStatusActivity"></activity>
     </application>
 
 </manifest>

@@ -14,4 +14,14 @@
 
     <!-- U.I & View related dimension values -->
     <string name="edittext_default_size">18sp</string>
+
+    <!-- Drop-down list for user status -->
+    <string-array name="choose_usage_status">
+        <item>Choose: </item>
+        <item> Driver </item>
+        <item> Rider </item>
+    </string-array>
+
+    <string name="usage_prompt">Choose your usage status</string>
+
 </resources>

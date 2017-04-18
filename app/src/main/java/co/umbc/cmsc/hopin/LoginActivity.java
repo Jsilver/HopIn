@@ -3,6 +3,7 @@ package co.umbc.cmsc.hopin;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo:hello", "bar:world", "chiugwu1:dummypasswordstring"
+            "user:passwordd", "super:passwordd", "chiugwu1:dummypassword"
     };
 
     /**
@@ -202,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             try {
                 // Simulate network access.
-                Thread.sleep(9000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -216,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -225,7 +226,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent authOkIntent = new Intent(getApplicationContext(), UsageStatusActivity.class);
+                startActivity(authOkIntent); // Navigate to
+                finish(); // Terminate Activity
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
