@@ -16,7 +16,6 @@ import android.widget.Toast;
 public class UsageStatusActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Spinner spinnerUsageStatus;
-    //Button buttonUsageStatus;
     LinearLayout linearLayoutUsageStatus;
 
     public static final int STATUS_UNSELECTED = 0;
@@ -31,13 +30,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_usage_status);
 
         spinnerUsageStatus      = (Spinner) findViewById(R.id.spinner_usage_status_choose);
-        //buttonUsageStatus       = (Button) findViewById(R.id.button_usage_status_choose);
         linearLayoutUsageStatus = (LinearLayout) findViewById(R.id.activity_usage_status);
-
-        /*List<String> usageStatusList = new ArrayList<String>();
-        ArrayAdapter<String> usageAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, usageStatusList);
-        usageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerUsageStatus.setAdapter(usageAdapter);*/
 
         spinnerUsageStatus.setOnItemSelectedListener(this);
     }
@@ -62,7 +55,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
 
-        } // end switch stmtq
+        } // end switch stmt
 
     } // end onClick()
 
