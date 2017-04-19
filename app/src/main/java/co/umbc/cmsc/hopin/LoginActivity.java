@@ -203,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             try {
                 // Simulate network access.
-                Thread.sleep(3000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
             }

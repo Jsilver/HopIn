@@ -1,5 +1,6 @@
 package co.umbc.cmsc.hopin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,14 @@ import android.widget.Toast;
 public class UsageStatusActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     Spinner spinnerUsageStatus;
-    //giButton buttonUsageStatus;
+    //Button buttonUsageStatus;
     LinearLayout linearLayoutUsageStatus;
 
-    public static final int BUTTON_CONFIRM = 1;
+    public static final int STATUS_UNSELECTED = 0;
+    public static final int STATUS_DRIVER = 1;
+    public static final int STATUS_RIDER  = 2;
+
+    private boolean mButtonConfCreated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,27 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View clickedView) {
+
         switch (clickedView.getId()) {
+
             case R.id.button_usage_status_confirm:
                 //selection confirmed.;
-                //break;
-        }
-    }
+                int selectedValue = (int) spinnerUsageStatus.getSelectedItemId();
+                spinnerUsageStatus.getSelectedItem();
+                //Log.d("selected Item: ", String.valueOf(selectedValue));
+                if (selectedValue == this.STATUS_RIDER) {
+                    Intent intent = new Intent(getApplicationContext(), AddressActivity.class);
+                    startActivity(intent);
+                } else
+                if (selectedValue == this.STATUS_DRIVER) {
+                    Intent intent = new Intent(getApplicationContext(), Seats.class);
+                    startActivity(intent);
+                }
+                break;
+
+        } // end switch stmtq
+
+    } // end onClick()
 
     /**
      * <p> Callback method to be invoked when an item in this view has been selected.
@@ -58,17 +78,16 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Toast.makeText(parent.getContext(), "OnItemSelectedListener : " + String.valueOf(parent.getItemIdAtPosition(position)), Toast.LENGTH_SHORT).show();
         switch ((int) parent.getItemIdAtPosition(position)) {
-            case 0:
+            case STATUS_UNSELECTED:
                 //do nothing
                 break;
-            case 1:  // driver
-                Toast.makeText(parent.getContext(), "You chose to be a : " + parent.getItemAtPosition(position).toString() + ", Pls confirm!", Toast.LENGTH_LONG).show();
+            case STATUS_DRIVER:
+                Toast.makeText(parent.getContext(), "You chose to be a : " + parent.getItemAtPosition(position).toString() + ", Pls confirm!", Toast.LENGTH_SHORT).show();
                 addButtonOnSelection();
                 break;
-            case 2: // rider
-                Toast.makeText(parent.getContext(), "You chose to be a : " + parent.getItemAtPosition(position).toString() + ", Pls confirm!", Toast.LENGTH_LONG).show();
+            case STATUS_RIDER:
+                Toast.makeText(parent.getContext(), "You chose to be a : " + parent.getItemAtPosition(position).toString() + ", Pls confirm!", Toast.LENGTH_SHORT).show();
                 addButtonOnSelection();
                 break;
         } // end switch
@@ -88,18 +107,24 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
      * Dynamically creates a confirmation button.
      */
     public void addButtonOnSelection() {
-        ContextThemeWrapper btnContext = new ContextThemeWrapper(getBaseContext(), R.style.AppTheme_Button);
-        Button buttonConfirmation = new Button(btnContext);
 
-        buttonConfirmation.setId(R.id.button_usage_status_confirm);
-        buttonConfirmation.setText("CONFIRM!");
-        buttonConfirmation.setLayoutParams(new LinearLayout.LayoutParams(350, 90));
-        buttonConfirmation.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.White));
-        buttonConfirmation.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.colorAccent2));
-        buttonConfirmation.setGravity(Gravity.CENTER);
-        //buttonConfirmation.setTextAppearance(getApplicationContext(), android.R.style.Widget_Material_Button_Colored);
+        if (!mButtonConfCreated) {
+            ContextThemeWrapper btnContext = new ContextThemeWrapper(getBaseContext(), R.style.AppTheme_Button);
+            Button buttonConfirmation = new Button(btnContext);
 
-        linearLayoutUsageStatus.addView(buttonConfirmation);
+            buttonConfirmation.setId(R.id.button_usage_status_confirm);
+            buttonConfirmation.setText("CONFIRM!");
+            buttonConfirmation.setLayoutParams(new LinearLayout.LayoutParams(350, 90));
+            buttonConfirmation.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.White));
+            buttonConfirmation.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.colorAccent2));
+            buttonConfirmation.setGravity(Gravity.CENTER);
+            //buttonConfirmation.setTextAppearance(getApplicationContext(), android.R.style.Widget_Material_Button_Colored);
+            buttonConfirmation.setOnClickListener(this);
+
+            linearLayoutUsageStatus.addView(buttonConfirmation);
+            mButtonConfCreated = true;
+        }
+
     }
 
 } // end Activity class
