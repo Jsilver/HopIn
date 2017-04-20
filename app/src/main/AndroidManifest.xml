@@ -3,9 +3,11 @@
     package="co.umbc.cmsc.hopin">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!--
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    -->
 
     <application
         android:allowBackup="true"
@@ -30,7 +32,11 @@
             android:label="HopIn" />
         <activity android:name=".PhoneActivity" />
         <activity android:name=".AddressActivity" />
-        <activity android:name=".UsageStatusActivity"></activity>
+        <activity android:name=".UsageStatusActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

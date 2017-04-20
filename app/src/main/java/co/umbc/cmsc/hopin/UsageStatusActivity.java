@@ -46,7 +46,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
                 spinnerUsageStatus.getSelectedItem();
                 //Log.d("selected Item: ", String.valueOf(selectedValue));
                 if (selectedValue == this.STATUS_RIDER) {
-                    Intent intent = new Intent(getApplicationContext(), AddressActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else
                 if (selectedValue == this.STATUS_DRIVER) {
