@@ -3,6 +3,7 @@ package co.umbc.cmsc.hopin;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
+            "user:passwordd", "super:passwordd", "chiugwu1:dummypassword"
     };
 
     /**
@@ -70,12 +71,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * Called when a view has been clicked.
      *
-     * @param v The view that was clicked.
+     * @param clickedView The view that was clicked.
      */
     @Override
-    public void onClick(View v) {
+    public void onClick(View clickedView) {
 
-        switch (v.getId()) {
+        switch (clickedView.getId()) {
             case R.id.button_login_email_signin:
                 attemptLogin();
                 break;
@@ -104,28 +105,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
+        boolean invalidCredentialsFlag = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) || !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
+            invalidCredentialsFlag = true;
         }
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            cancel = true;
+            invalidCredentialsFlag = true;
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            cancel = true;
+            invalidCredentialsFlag = true;
         }
 
-        if (cancel) {
+        if (invalidCredentialsFlag) {
             // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         } else {
@@ -143,7 +144,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+        if (TextUtils.isEmpty(password)) {
+            return false;
+        }
         return password.length() > 8;
     }
 
@@ -200,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -214,7 +217,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -223,7 +226,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showProgress(false);
 
             if (success) {
-                finish();
+                Intent authOkIntent = new Intent(getApplicationContext(), UsageStatusActivity.class);
+                startActivity(authOkIntent); // Navigate to
+                finish(); // Terminate Activity
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

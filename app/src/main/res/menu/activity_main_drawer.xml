@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_address"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Address" />
+        <item
+            android:id="@+id/nav_phone"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Phone" />
+        <item
+            android:id="@+id/nav_usage_status"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Usage Status" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
+    </group>
+
+    <item android:title="Driver Setup">
+        <menu>
+            <item
+                android:id="@+id/nav_cardetails"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Car Details" />
+            <item
+                android:id="@+id/nav_seats"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Seats" />
+        </menu>
+    </item>
+
+</menu>
