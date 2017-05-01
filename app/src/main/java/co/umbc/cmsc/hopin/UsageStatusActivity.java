@@ -1,10 +1,12 @@
 package co.umbc.cmsc.hopin;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 public class UsageStatusActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    private static final String TAG = "UsageStatusActivity: " ;
     Spinner spinnerUsageStatus;
     LinearLayout linearLayoutUsageStatus;
 
@@ -23,6 +26,9 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
     public static final int STATUS_RIDER  = 2;
 
     private boolean mButtonConfCreated = false;
+
+    SessionManager mSessionManager;
+    SessionManager.UserDetails mUserDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,21 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
         linearLayoutUsageStatus = (LinearLayout) findViewById(R.id.activity_usage_status);
 
         spinnerUsageStatus.setOnItemSelectedListener(this);
+
+        mSessionManager = new SessionManager(getApplicationContext());
+    }
+
+    /**
+     *  this will fetch information about the currently logged in user and update the class field for inclusion in the data sent to webservice.
+     */
+    private String getLoggedInId() {
+        mUserDetails = mSessionManager.getUserDetailsAsObject();
+
+        if (mUserDetails != null) {
+            return mUserDetails.getEmail();
+            //debug
+        }
+        return "blank";
     }
 
     @Override
@@ -40,16 +61,22 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
 
         switch (clickedView.getId()) {
 
-            case R.id.button_usage_status_confirm:
-                //selection confirmed.;
+            case R.id.button_usage_status_confirm:  //selection confirmed.;
+
+                String[] input = new String[4]; // container for values to be passed to webservice
+                input[1] = this.getLoggedInId(); // set second param of input[] as userid
+
                 int selectedValue = (int) spinnerUsageStatus.getSelectedItemId();
                 spinnerUsageStatus.getSelectedItem();
                 //Log.d("selected Item: ", String.valueOf(selectedValue));
                 if (selectedValue == this.STATUS_RIDER) {
+                    input[0] = "setrider";
+                    invokeWebService(input);
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else
                 if (selectedValue == this.STATUS_DRIVER) {
+                    input[0] = "setdriver";
                     Intent intent = new Intent(getApplicationContext(), Seats.class);
                     startActivity(intent);
                 }
@@ -119,5 +146,50 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+    /**
+     * This method will invoke the web service
+     * @param input : a string array containing parameters for the webservice.  The first param should be the endpoint of the webservice, we want to call.
+     */
+    private void invokeWebService(String[] input) {
+
+        //input[0] = String.valueOf();
+        //input[1] = this.userEmailId;
+
+        InvokeWebserviceTask myWebService = new InvokeWebserviceTask();
+        myWebService.execute(input);
+
+    }
+
+    private class InvokeWebserviceTask extends AsyncTask<String, Integer, String> {
+
+        String requestURL;
+
+        /**
+         * Override this method to perform a computation on a background thread. The specified parameters are the parameters passed to {@link #execute} by the caller of this task.
+         * This method can call {@link #publishProgress} to publish updates on the UI thread.
+         *
+         * @param params The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected String doInBackground(String... params) {
+            switch (params[0]) {
+                case "getdrivers":
+                    requestURL = "http://10.200.54.39/hopinservice/api/v0/getdrivers.php";
+                    Log.d(TAG, requestURL);
+                    break;
+                case "getriders":
+                    requestURL = "http://10.200.54.39/hopinservice/api/v0/getdrivers.php";
+                    Log.d(TAG, requestURL);
+                    break;
+            }
+            return null;
+        }
+
+    } // end class
 
 } // end Activity class
