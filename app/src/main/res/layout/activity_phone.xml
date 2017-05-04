@@ -37,9 +37,9 @@
         android:textColor="@color/White" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="126dp"
+        android:id="@+id/phone_button"
         style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="126dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="Confirm" />
