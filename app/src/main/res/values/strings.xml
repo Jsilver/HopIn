@@ -1,15 +1,21 @@
 <resources>
-    <string name="app_name">Hop In</string>
+    <string name="app_name">Hop In!</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">(UMBC) Email ID </string>
+    <string name="label_signup_header">create your account</string>
+    <string name="prompt_email">(UMBC) username</string>
+    <string name="prompt_email_signup">Your UMBC username </string>
     <string name="prompt_password">Enter your Password</string>
+    <string name="prompt_password_signup">Enter A Password</string>
     <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign me Up!</string>
+    <string name="action_sign_up_short">Sign Up</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_signup_fail">Sign up failed, perhaps username is already used.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
 
     <!-- U.I & View related dimension values -->
@@ -21,6 +27,11 @@
         <item> Driver </item>
         <item> Rider </item>
     </string-array>
+
+    <!-- Shared Preference File used by the Basic Auth Mechanism -->
+    <string name="auth_preference_file_key">AuthUserFile</string>
+    <string name="auth_key_full_name">Fullname</string>
+
 
     <string name="usage_prompt">Choose your usage status</string>
     <string name="title_activity_main">Home</string>

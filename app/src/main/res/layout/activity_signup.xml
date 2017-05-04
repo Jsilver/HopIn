@@ -1,8 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorLoginBackground7"
+    android:id="@+id/activity_signup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -11,11 +13,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="co.umbc.cmsc.hopin.LoginActivity">
+    tools:context="co.umbc.cmsc.hopin.SignUpActivity">
 
-    <!-- Login progress -->
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/progressbar_signup"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,61 +24,75 @@
         android:visibility="gone" />
 
     <ScrollView
-        android:id="@+id/scrollview_login_form"
+        android:id="@+id/scrollview_signup_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/linearlayout_login_form_signin"
+            android:id="@+id/linearlayout_signin_form_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="40dp">
 
-            <TextView
-                android:id="@+id/textview_login_title"
-                android:text="Welcome to Hop In!"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/White"
-                android:layout_gravity="center_horizontal"
-                style="?android:textAppearanceLarge" />
-
             <ImageView
-                android:id="@+id/imageview_login_app_icon"
+                android:id="@+id/imageview_signup_app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_hopin_logo_c3" />
 
-            <!-- Layout used to wrap the email ID and email suffix Views -->
-            <LinearLayout
-                android:id="@+id/linearlayout_login_wrapper_emailid"
+            <TextView
+                android:id="@+id/textview_signup_title"
+                android:text="@string/label_signup_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/White"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                style="?android:textAppearanceLarge" />
+
+            <EditText
+                android:id="@+id/edittext_signup_fullname"
+                android:textColor="@color/White"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Enter your name"
+                android:textColorHint="@color/White"
+                android:ems="10"
+                android:layout_weight="1" />
+
+            <!-- Layout used to wrap the email ID and email suffix Views -->
+            <LinearLayout
+                android:id="@+id/linearlayout_signup_wrapper_emailid"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/edittext_login_userid"
+                    android:id="@+id/edittext_signup_email"
                     android:textColor="@color/White"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin_large"
                     android:inputType="textEmailAddress"
-                    android:hint="@string/prompt_email"
+                    android:hint="@string/prompt_email_signup"
                     android:textAlignment="textEnd"
                     android:textColorHint="@color/White"
-                    android:ems="10"
-                    android:layout_weight="1" />
+
+                    android:layout_weight="3" />
 
                 <TextView
-                    android:id="@+id/textview_login_email"
+                    android:id="@+id/textview_signup_email"
                     android:text=" @umbc.edu"
                     android:textSize="18sp"
                     android:textColor="@color/White"
-                    android:layout_weight="1"
+
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
 
             </LinearLayout>
 
@@ -87,58 +102,30 @@
                 android:layout_height="wrap_content">
 
                 <android.support.design.widget.TextInputEditText
-                    android:id="@+id/edittext_login_password"
+                    android:id="@+id/edittext_signup_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
                     android:textColor="@color/White"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/prompt_password_signup"
                     android:textColorHint="@color/White"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/button_login_email_signin"
+                android:id="@+id/button_signup_signup"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:background="@android:color/darker_gray"/>
-
-            <TextView
-                android:id="@+id/textview_login_label_signup"
-                android:text="Haven't signed up?"
-                android:textSize="18sp"
-                android:textColor="@color/White"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/button_login_to_signup"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_up_short"
-                android:textStyle="bold" />
+                android:text="@string/action_sign_up" />
 
         </LinearLayout>
 
     </ScrollView>
+
 
 </LinearLayout>
