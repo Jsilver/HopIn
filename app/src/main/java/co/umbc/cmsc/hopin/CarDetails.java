@@ -2,8 +2,6 @@ package co.umbc.cmsc.hopin;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +29,7 @@ public class CarDetails extends AppCompatActivity implements View.OnClickListene
         license = (EditText) findViewById(R.id.editText);
         make = (EditText) findViewById(R.id.editText2);
         model = (EditText) findViewById(R.id.editText3);
-        confirm = (Button) findViewById(R.id.button);
+        confirm = (Button) findViewById(R.id.phone_button);
         confirm.setOnClickListener(this);
         Spinner dropdown = (Spinner) findViewById(R.id.spinner1);
         String[] color = new String[]{"","Red", "Black", "Green","Yellow"};

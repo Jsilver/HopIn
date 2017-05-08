@@ -2,7 +2,7 @@
     <string name="app_name">Hop In!</string>
 
     <!-- Strings related to login -->
-    <string name="label_signup_header">create your account</string>
+    <string name="label_signup_header">Create Your Account</string>
     <string name="prompt_email">(UMBC) username</string>
     <string name="prompt_email_signup">Your UMBC username </string>
     <string name="prompt_password">Enter your Password</string>

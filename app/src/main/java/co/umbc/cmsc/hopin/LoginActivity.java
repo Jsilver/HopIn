@@ -9,9 +9,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * A login screen that offers login via UserId/password.
@@ -22,12 +35,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
+    Intent mNavIntent;
 
     // UI references.
     private EditText mEdittextUserId;
     private EditText mEdittextPassword;
     private View mProgressView;
     private View mLoginFormView;
+
+    private static final String TAG = "LoginActivity";
+
+    /**
+     * To Store User details for User Login Session purposes
+     */
+    HashMap<String, String> userDetails = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +60,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEdittextPassword = (EditText) findViewById(R.id.edittext_login_password);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.button_login_email_signin);
-        mEmailSignInButton.setOnClickListener(this);
+        if (mEmailSignInButton != null) {
+            mEmailSignInButton.setOnClickListener(this);
+        }
 
         Button mButtonGoToSignUp = (Button) findViewById(R.id.button_login_to_signup);
-        mButtonGoToSignUp.setOnClickListener(this);
+        if (mButtonGoToSignUp != null) {
+            mButtonGoToSignUp.setOnClickListener(this);
+        }
 
         mLoginFormView = findViewById(R.id.scrollview_login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -89,8 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Store values at the time of the login attempt.
         String username = mEdittextUserId.getText().toString();
-        // TODO : append suffix @umbc.edu to email string obtained.
-        String email = username;
+        String email    = UtilHelper.appendEmailSuffix(username);
         String password = mEdittextPassword.getText().toString();
 
         boolean invalidCredentialsFlag = false;
@@ -120,8 +144,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             // Show a progress spinner, and kick off a background task to perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, UtilHelper.sha1Hash(password));
-            mAuthTask.execute((Void) null);
+            userDetails = new HashMap<String, String>();
+            userDetails.put(SessionManager.KEY_USERNAME, username);
+            userDetails.put(SessionManager.KEY_EMAIL, email);
+            userDetails.put(SessionManager.KEY_PASSWORD, UtilHelper.sha1Hash(password));
+            mAuthTask = new UserLoginTask(userDetails); // login credentials are passed in here.
+            mAuthTask.execute();
         }
     }
 
@@ -132,10 +160,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public boolean isPasswordValid(String password) {
-        if (TextUtils.isEmpty(password)) {
-            return false;
-        }
-        return password.length() > 8;
+        return !TextUtils.isEmpty(password) && password.length() > 8;
     }
 
     /**
@@ -179,25 +204,106 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+        URL url;
+        String responseStr = "";
+        String requestURL = "http://10.200.54.39/hopinservice/api/v0/signin.php";
+
+
+        private UserLoginTask(HashMap<String, String> userDetails) {
+            mEmail = userDetails.get(SessionManager.KEY_EMAIL);
+            mPassword = userDetails.get(SessionManager.KEY_PASSWORD);
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-            try {
+            try{
+
                 // Simulate network access.
                 Thread.sleep(10);
-            } catch (InterruptedException e) {
-                return false;
+
+                url = new URL(requestURL);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                StringBuilder str = new StringBuilder();
+
+                str.append("email="+mEmail+"&").append("password="+mPassword);
+                Log.d(TAG, "Login String: "+String.valueOf(str));
+
+                String stringParams = str.toString();
+                writer.write(stringParams);
+                writer.flush();
+                writer.close();
+
+                int responseCode = connection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line = " | ";
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    line = br.readLine();
+                    while (line != null) {
+                        responseStr += line;
+                        Log.d(TAG, "Response from Server:" + line);
+                        line = br.readLine();
+                    }
+                    br.close();
+
+                    return parseJsonResponse(responseStr);
+                    //return Boolean.valueOf(parseJsonResponse(responseStr)); // Converts boolean to Boolean.
+                }
+                connection.disconnect();
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
-            /* One last check, query the shared pref file.  */
-            SessionManager mSession = new SessionManager(getApplicationContext());
-            return mSession.authenticate(mEmail, mPassword);
+            return null; //this should only occur if there was an error in signing the user in!
+
+        }
+
+        private boolean parseJsonResponse(String responseStr) {
+            try {
+                JSONObject jsonObj = new JSONObject(responseStr);
+
+                boolean result = jsonObj.getBoolean("result");
+
+                if (result) { // This checks the result of the web-service!
+                    Log.d(TAG, "Call to Web Service : Successful, User Exists!");
+
+                    userDetails.put(SessionManager.KEY_USERID, jsonObj.getString("id"));
+                    userDetails.put(SessionManager.KEY_FULLNAME, jsonObj.getString("fullname"));
+                    userDetails.put(SessionManager.KEY_EMAIL, jsonObj.getString("email"));
+
+                    SessionManager mSession = new SessionManager(getApplicationContext());
+                    mSession.createNewSession(userDetails);
+
+                    // Still pass this to Intent. Session info can be retrieved here as well as from SessionManager.
+                    mNavIntent = new Intent(getBaseContext(), UsageStatusActivity.class);
+                    mNavIntent.putExtra("EXTRA_SESSION_ID", jsonObj.getString("id"));
+                    mNavIntent.putExtra("EXTRA_SESSION_NAME", jsonObj.getString("fullname"));
+                    mNavIntent.putExtra("EXTRA_SESSION_EMAIL", jsonObj.getString("email"));
+                    return true;
+                }
+                else {
+                    Log.d(TAG, "Web service reported INVALID credentials");
+                    return false;
+                }
+
+            } catch (final JSONException e) {
+                //e.printStackTrace();
+                Log.e(TAG, "Json parsing error: " + e.getMessage());
+            } // end catch
+
+            return false; // this line should technically never execute, unless the web-service failed!
         }
 
         @Override
@@ -206,8 +312,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showProgress(false);
 
             if (success) {
-                Intent authOkIntent = new Intent(getApplicationContext(), UsageStatusActivity.class);
-                startActivity(authOkIntent); // Navigate to
+                mNavIntent = new Intent(getApplicationContext(), UsageStatusActivity.class);
+                startActivity(mNavIntent); // Navigate to
                 finish(); // Terminate Activity
             } else {
                 mEdittextPassword.setError(getString(R.string.error_incorrect_password));

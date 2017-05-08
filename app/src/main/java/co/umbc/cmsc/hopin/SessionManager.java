@@ -22,9 +22,9 @@ public class SessionManager {
 
     private static final String PREF_NAME = String.valueOf(R.string.auth_preference_file_key);
 
-    public static final String KEY_FULLNAME   = String.valueOf(R.string.auth_key_full_name);
-
     // Move these to a String resource file
+    public static final String KEY_USERID = "UserId";
+    public static final String KEY_FULLNAME   = String.valueOf(R.string.auth_key_full_name);
     public static final String KEY_USERNAME   = "Username";
     public static final String KEY_EMAIL      = "Email";
     public static final String KEY_PASSWORD   = "Password";
@@ -44,7 +44,7 @@ public class SessionManager {
      * Over-writes whatever user details happens to be stored in the AuthUserFile, if any.
      * @param user
      */
-    public boolean signUp(HashMap<String, String> user) {
+    public boolean createNewSession(HashMap<String, String> user) {
         /* Store user details in shared pref file. */
         mSharedPrefEditor.putString(KEY_FULLNAME, user.get(KEY_FULLNAME));
         mSharedPrefEditor.putString(KEY_USERNAME, user.get(KEY_USERNAME));
@@ -67,6 +67,14 @@ public class SessionManager {
         }
         return false;
     }
+
+    public boolean setLoginStatus(boolean value) {
+
+        mSharedPrefEditor.putBoolean(KEY_ISLOGGEDIN, value);  //set the user as logged in
+        return mSharedPrefEditor.commit(); // true; if user is set as logged in, then indicate that authentication was successful
+
+    }
+
 
     /**
      * Get Stored session data.
@@ -141,19 +149,26 @@ public class SessionManager {
         String fullname = "empty";
         String email = "empty";
 
+        // Constructor
         public UserDetails(String fullname, String username, String email) {
             this.fullname = fullname;
             this.username = username;
             this.email = email;
         }
 
-        public String getDisplayName() {
-            return fullname;
+        public void setFullname(String fullname) {
+            this.fullname = fullname;
         }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getDisplayName() { return this.fullname; }
 
         public String getEmail() { return this.email; }
 
-        public String getUsername() { return username; }
+        public String getUsername() { return this.username; }
 
     } // end InnerClass
 
