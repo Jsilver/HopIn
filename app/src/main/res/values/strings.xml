@@ -3,7 +3,7 @@
 
     <!-- Strings related to login -->
     <string name="label_signup_header">Create Your Account</string>
-    <string name="prompt_email">(UMBC) username</string>
+    <string name="prompt_email">(UMBC) email ID</string>
     <string name="prompt_email_signup">Your UMBC username </string>
     <string name="prompt_password">Enter your Password</string>
     <string name="prompt_password_signup">Enter A Password</string>

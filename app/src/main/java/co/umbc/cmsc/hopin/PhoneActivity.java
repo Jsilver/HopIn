@@ -12,17 +12,21 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     String username, email;
     Button submit;
     EditText number;
+    SessionManager mSessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone);
-        /*
-         * The next 2 lines assume that a username and an email is passed when changing intents
-         */
-        username = getIntent().getStringExtra("Username");
-        email = getIntent().getStringExtra("Email");
+
+        mSessionManager = new SessionManager(this);
+        username = mSessionManager.getUserDetailsAsObject().getUsername();
+        email = mSessionManager.getUserDetailsAsObject().getEmail();
+        //username = getIntent().getStringExtra("Username");    //email = getIntent().getStringExtra("Email");
         submit = (Button)findViewById(R.id.phone_button);
-        submit.setOnClickListener(this);
+        if (submit != null) {
+            submit.setOnClickListener(this);
+        }
         number = (EditText)findViewById(R.id.edittext_phone_number);
     }
 
@@ -37,5 +41,6 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(AddressIntent);
                 break;
         }
-    }
-}
+    } // end method
+
+} // end class
