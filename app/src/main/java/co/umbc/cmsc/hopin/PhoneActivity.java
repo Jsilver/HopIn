@@ -21,7 +21,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
          */
         username = getIntent().getStringExtra("Username");
         email = getIntent().getStringExtra("Email");
-        submit = (Button)findViewById(R.id.button);
+        submit = (Button)findViewById(R.id.phone_button);
         submit.setOnClickListener(this);
         number = (EditText)findViewById(R.id.edittext_phone_number);
     }
@@ -29,7 +29,7 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.button:
+            case R.id.phone_button:
                 Intent AddressIntent = new Intent(this, AddressActivity.class);
                 AddressIntent.putExtra("Phone", number.getText().toString());
                 AddressIntent.putExtra("Username", username);
