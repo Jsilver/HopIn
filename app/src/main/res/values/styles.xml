@@ -6,6 +6,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent2</item>
+
+        <!-- Customize EditText here. -->
+        <item name="colorControlNormal">@color/White</item>
+        <item name="colorControlActivated">@color/colorAccent2</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
     <!-- Customize default button styles that are used in this app -->
@@ -18,5 +23,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="AppTheme.EditText" parent="Theme.AppCompat.Light.NoActionBar">
+
+    </style>
+
+    <style name="GreenTextLarge" parent="@android:style/TextAppearance.Large">
+        <item name="android:textColor">#00FF00</item>
+    </style>
 
 </resources>

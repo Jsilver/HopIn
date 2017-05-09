@@ -291,7 +291,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 currentuser = new LatLng(latitude, longitude);
             }
             // At this point, the logged in user is added to the map!
-            String loggedInFullName = new SessionManager(getBaseContext()).getUserDetailsAsObject().getDisplayName();
+            String loggedInFullName = new SessionManager(getBaseContext()).getUserDetailsAsObject().getEmail();
             mMap.addMarker(new MarkerOptions().position(currentuser).title(loggedInFullName+" (You)").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
             if(!animate) {

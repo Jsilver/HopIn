@@ -14,6 +14,6 @@
     <color name="colorLoginBackground4">#E3E3E3</color>
     <color name="colorLoginBackground5">#494949</color>
     <color name="colorLoginBackground6">#1C1C54</color>
-    <color name="colorLoginBackground7">#3B4655</color>
-    <color name="colorLoginBackground8">#141A21</color>
+    <color name="colorLoginBackground7">#141A21</color>
+    <color name="colorLoginBackground8">#3B4655</color> <!-- Former BG -->
 </resources>
