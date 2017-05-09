@@ -1,5 +1,6 @@
 package co.umbc.cmsc.hopin;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -11,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,15 +42,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     LocationManager locationManager;
     double latitude, longitude;
-    boolean bound = false, animate;
-    List<Rider> ridersList;
+    boolean bound = false, animate; private static boolean DEBUG = true;
 
     int success;
     String userEmail;
 
     private static final String TAG = "MapsActivity";
     private String baseURL;
-
 
     Timer timer;
     GetUpdatedFriendsTimer timerTask;
@@ -59,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -76,13 +75,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //re-schedule timer here
-        //otherwise, IllegalStateException of
-        //"TimerTask is scheduled already"
-        //will be thrown
+        //otherwise, IllegalStateException of "TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 1000); // repeating every 5sec
-
+        timer.schedule(timerTask, 1000, 60000); // repeating every 5sec
     }
 
 
@@ -96,16 +92,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        bound = true;
-
+        bound = true;  if (DEBUG) { Log.d(TAG, "onMapReady() called"); }
     }
 
     @Override
     public void onLocationChanged(Location location) {
 
         latitude = location.getLatitude();
-        longitude = location.getLongitude();
-
+        longitude = location.getLongitude();    if (DEBUG) { Log.d(TAG, "onLocationChanged() called"); }
 
     }
 
@@ -128,28 +122,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onResume() {
         animate = false;
         super.onResume();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
         if (timer != null) {
             timer.cancel();
         }
 
         //re-schedule timer here
-        //otherwise, IllegalStateException of
-        //"TimerTask is scheduled already"
-        //will be thrown
+        //otherwise, IllegalStateException of TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, 1000, 60000);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //  ActivityCompat#requestPermissions here to request the missing permissions, and then overriding
+            //  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+            //  to handle the case where the user grants the permission. See the documentation for ActivityCompat#requestPermissions for more details.
             return;
         }
         locationManager.removeUpdates(this);
@@ -168,7 +168,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
     class GetUpdatedFriendsTimer extends TimerTask {
 
         @Override
@@ -177,6 +176,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 getFriends();
             }
         }
+
     }
 
     public void getFriends(){
@@ -191,7 +191,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         InvokeWebService webService = new InvokeWebService();
         webService.execute(input);
-        Log.d(TAG,"sign up web service called");
+        Log.d(TAG,"Invoke web service called");
 
     }
 
@@ -217,7 +217,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
                 StringBuilder str = new StringBuilder();
 
-                str.append("useremail="+params[0]+"&").append("latitude="+params[1]+"&");
+                str.append("userEmail="+params[0]+"&").append("latitude="+params[1]+"&");
                 str.append("longitude="+params[2]);
 
                 String urstr = str.toString();
@@ -246,7 +246,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     JSONObject json = new JSONObject(response);
                     String message = json.getString("message");
                     success = json.getInt("success");
-                    JSONArray friends = json.getJSONArray("friends");
+                    JSONArray friends = json.getJSONArray("riders");
 
                     if(friends.length() > 0 ){
 
@@ -260,8 +260,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         //displayAllFriends(ridersList);
                     }
 
-                    Toast.makeText(MapsActivity.this,message,Toast.LENGTH_LONG).show();
-
+                    //Toast.makeText(MapsActivity.this,message,Toast.LENGTH_LONG).show();
 
                 }
                 myconnection.disconnect();
@@ -279,16 +278,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             super.onPostExecute(riders);
             displayAllRiders(riders);
         }
+
     }
 
     public void displayAllRiders(List<Rider> ridersList) {
+
+        if (DEBUG) { Log.d(TAG, "onPostExecute() called: displayAllRiders"); }
         if (bound == true) {
             mMap.clear();
             LatLng currentuser ;
             synchronized (this) {
                 currentuser = new LatLng(latitude, longitude);
             }
-            mMap.addMarker(new MarkerOptions().position(currentuser).title("I'm here"));
+            // At this point, the logged in user is added to the map!
+            String loggedInFullName = new SessionManager(getBaseContext()).getUserDetailsAsObject().getDisplayName();
+            mMap.addMarker(new MarkerOptions().position(currentuser).title(loggedInFullName+" (You)").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
             if(!animate) {
                 CameraPosition userposition = CameraPosition.builder().target(currentuser).zoom(14).build();
@@ -297,14 +301,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 animate = true;
             }
 
+            if (DEBUG) { Log.d(TAG, "ridersList"+ridersList.toString()); }
+            // At this point, the logged in riders (obtained from web-service) are added to the map
             for(Rider riders : ridersList) {
-
                 LatLng userLocation = new LatLng(riders.getLatitude(), riders.getLongitude());
-
                 mMap.addMarker(new MarkerOptions().position(userLocation).title(riders.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-
-            }
+            } // end for
         }
-    }
+
+    } // end method
 
 }  // end class

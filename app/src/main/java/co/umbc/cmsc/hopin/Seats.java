@@ -14,19 +14,17 @@ import android.widget.Spinner;
 
 public class Seats extends AppCompatActivity implements View.OnClickListener {
 
-    Button confirm;
-    SessionManager mSessionManager;
+    Button buttonConfirm;
 
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seats);
 
-        confirm = (Button) findViewById(R.id.button2);
-        confirm.setOnClickListener(this);
+        buttonConfirm = (Button) findViewById(R.id.button_seats_confirm);
+        buttonConfirm.setOnClickListener(this);
 
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner);
+        Spinner dropdown = (Spinner) findViewById(R.id.spinner_seats_dropdown);
         String[] seats = new String[]{"","1", "2", "3","4","5","6"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, seats);
         dropdown.setAdapter(adapter);
@@ -35,11 +33,10 @@ public class Seats extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.button2:
+            case R.id.button_seats_confirm:
                 Intent intent = new Intent(this, MapsActivity.class);
-                mSessionManager = new SessionManager(getApplicationContext());
-                //msessionmanager.getUserDetailsAsObject().getEmail();
-                intent.putExtra("userEmail",mSessionManager.getUserDetailsAsObject().getEmail());
+                intent.putExtra("userEmail",new SessionManager(getApplicationContext()).getUserDetailsAsObject().getEmail());
+                intent.putExtra("userFullName",new SessionManager(getApplicationContext()).getUserDetailsAsObject().getDisplayName());
                 startActivity(intent);
                 break;
         }
