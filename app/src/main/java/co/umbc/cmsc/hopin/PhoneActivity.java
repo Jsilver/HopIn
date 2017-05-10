@@ -12,24 +12,28 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
     String username, email;
     Button submit;
     EditText number;
+    SessionManager mSessionManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone);
-        /*
-         * The next 2 lines assume that a username and an email is passed when changing intents
-         */
-        username = getIntent().getStringExtra("Username");
-        email = getIntent().getStringExtra("Email");
-        submit = (Button)findViewById(R.id.button);
-        submit.setOnClickListener(this);
+
+        mSessionManager = new SessionManager(this);
+        username = mSessionManager.getUserDetailsAsObject().getUsername();
+        email = mSessionManager.getUserDetailsAsObject().getEmail();
+        //username = getIntent().getStringExtra("Username");    //email = getIntent().getStringExtra("Email");
+        submit = (Button)findViewById(R.id.phone_button);
+        if (submit != null) {
+            submit.setOnClickListener(this);
+        }
         number = (EditText)findViewById(R.id.edittext_phone_number);
     }
 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
-            case R.id.button:
+            case R.id.phone_button:
                 Intent AddressIntent = new Intent(this, AddressActivity.class);
                 AddressIntent.putExtra("Phone", number.getText().toString());
                 AddressIntent.putExtra("Username", username);
@@ -37,5 +41,6 @@ public class PhoneActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(AddressIntent);
                 break;
         }
-    }
-}
+    } // end method
+
+} // end class

@@ -19,36 +19,49 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
-            android:label="login">
-        </activity>
-
+            android:label="login"></activity>
         <activity
             android:name=".CarDetails"
             android:label="Vehicle Details" />
-
         <activity
             android:name=".Seats"
             android:label="Seats Available" />
-
         <activity android:name=".PhoneActivity" />
         <activity android:name=".AddressActivity" />
         <activity android:name=".UsageStatusActivity" />
+        <activity android:name=".SignUpActivity" />
 
-        <activity android:name=".SignUpActivity"></activity>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.umbc.cmsc.hopin.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

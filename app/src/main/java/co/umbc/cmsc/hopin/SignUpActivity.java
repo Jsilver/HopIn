@@ -9,11 +9,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,6 +35,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private Button mButtonSignup;
     private View mScrollviewSignup;
     private View mProgressBarSignup;
+    Intent mNavIntent;
+
+    private static final String TAG = "SignUpActivity";
 
     /**
      * To Store User details for registration purposes
@@ -119,7 +133,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             userDetails.put(SessionManager.KEY_PASSWORD, UtilHelper.sha1Hash(password));
 
             mSignupTask = new UserSignUpTask(userDetails);
-            mSignupTask.execute((Void) null);
+            mSignupTask.execute();
         }
 
     }
@@ -174,7 +188,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mFullname = userDetails.get(SessionManager.KEY_FULLNAME);
             mUsername = userDetails.get(SessionManager.KEY_USERNAME);
             mEmail = userDetails.get(SessionManager.KEY_EMAIL);
-            mPassword = userDetails.get(SessionManager.KEY_FULLNAME);
+            mPassword = userDetails.get(SessionManager.KEY_PASSWORD);
         }
 
         /**
@@ -189,15 +203,84 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         protected Boolean doInBackground(Void... params) {
             //TODO: attempt to send to webservice.
 
-            try {
-                // Simulate network access.
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                return false;
+            URL url;
+            String responseStr = "";
+            String requestURL = "http://10.200.54.39/hopinservice/api/v0/signup.php";
+
+            try{
+                url = new URL(requestURL);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                StringBuilder str = new StringBuilder();
+
+                str.append("email="+mEmail+"&").append("username="+mUsername+"&").append("password="+mPassword+"&").append("fullname="+mFullname);
+
+                String stringParams = str.toString();
+                writer.write(stringParams);
+                writer.flush();
+                writer.close();
+
+                int responseCode = connection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line = " | ";
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    line = br.readLine();
+                    while (line != null) {
+                        responseStr += line;
+                        Log.d("Response from Server: +", line);
+                        line = br.readLine();
+                    }
+                    br.close();
+                    //return parseJsonResponse(responseStr);
+                    return Boolean.valueOf( parseJsonResponse(responseStr) ); // Converts boolean to Boolean.
+                }
+                connection.disconnect();
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
-            SessionManager mSession = new SessionManager(getApplicationContext());
-            return mSession.signUp(userDetails);
+            //SessionManager mSession = new SessionManager(getApplicationContext());
+            //return mSession.createNewSession(userDetails);
+            return null; //this should only occur if there was an error in signing the user up!
+        }
+
+        private boolean parseJsonResponse(String responseStr) {
+            try {
+                JSONObject jsonObj = new JSONObject(responseStr);
+
+                boolean result = jsonObj.getBoolean("result");
+
+                if (result) {
+                    Log.d(TAG, "Response was TRUE");
+
+                    SessionManager mSession = new SessionManager(getApplicationContext());
+                    mSession.createNewSession(userDetails);
+
+                    // Still pass this to Intent. Session info can be retrieved here as well as from SessionManager.
+                    mNavIntent = new Intent(getBaseContext(), UsageStatusActivity.class);
+                    mNavIntent.putExtra("EXTRA_SESSION_NAME", mFullname); // index[2] == fullname
+                    mNavIntent.putExtra("EXTRA_SESSION_EMAIL", mEmail);  // index[0] == email
+                    return true;
+                }
+                else {
+                    Log.d(TAG, "Could not interpret response");
+                }
+
+            } catch (final JSONException e) {
+                //e.printStackTrace();
+                Log.e(TAG, "Json parsing error: " + e.getMessage());
+            } // end catch
+            return false;
         }
 
         /**
@@ -209,13 +292,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
          */
         @Override
         protected void onPostExecute(final Boolean result) {
-            //super.onPostExecute(result);
+            super.onPostExecute(result);
             mSignupTask = null;
             showProgress(false);
 
             if (result) {
-                Intent registerOkIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(registerOkIntent);  // Navigate to authenticated Activity.
+                mNavIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // clear activities that may have been launched before this activity
+                mNavIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // set as the start of a new task.
+                //mNavIntent = new Intent(getApplicationContext(), UsageStatusActivity.class);
+                startActivity(mNavIntent);  // Navigate to authenticated Activity.
                 finish(); // Terminate Activity
             }
             else {
@@ -238,6 +323,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mSignupTask = null;
             showProgress(false);
         }
+
     } // end Inner class
 
 } // end class

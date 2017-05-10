@@ -21,6 +21,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     String phone, username, email;
     EditText street, city, state, zip;
     Button confirm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +30,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
         username = getIntent().getStringExtra("Username");
         email = getIntent().getStringExtra("Email");
         street = (EditText)findViewById(R.id.edittext_street);
-        city = (EditText)findViewById(R.id.edittext_state);
+        city = (EditText)findViewById(R.id.edittext_city);
         state = (EditText)findViewById(R.id.edittext_state);
         zip = (EditText)findViewById(R.id.edittext_zipcode);
         confirm = (Button)findViewById(R.id.button_address_confirm);
@@ -87,10 +88,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             URL url;
             String response = "";
 
-            /*
-             * This part needs changing. Change the URL to where the php file is located.
-             */
-            String requestURL = "http://10.200.11.250/hopin/PhoneAddress.php";
+            String requestURL = "http://10.200.54.39/hopinservice/api/v0/phoneaddress.php";
             try
             {
                 url = new URL(requestURL);
@@ -140,5 +138,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             }
             return response;
         }
+
     }
+
 }

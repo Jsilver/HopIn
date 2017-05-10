@@ -33,17 +33,17 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
 
-    private static final String TAG = "MainActivity:";
+    private static final String TAG = "MainActivity";
     SessionManager mSessionManager;
     SessionManager.UserDetails mUserDetails;
 
     public String latitude = "49.5";
     public String longitude = "-77.5";
-    public String id = "tom06";
+    public String id = "00";
     public String userEmailId = "dummy@example.com";
     public String userFullName = "LoggedInUserPlaceholder";
 
-    public static final int MIN_TIME = 60000;  // measured in milliseconds, set to 60 seconds
+    public static final int MIN_TIME = 60000;  // measured in milliseconds, should be set to 60 seconds
     public static final int MIN_DISTANCE = 1;  // measured in meters
 
     private LocationManager mLocationManager;
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity
 
         mSessionManager = new SessionManager(getApplicationContext());
         mSessionManager.checkLoginStatus();
+
+        mSessionManager.getUserDetailsAsObject().getEmail();
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         updateLoggedInId();
@@ -273,7 +275,7 @@ public class MainActivity extends AppCompatActivity
                     line = br.readLine();
                     while (line != null) {
                         response += line;
-                        Log.d("Response from Server: ", line);
+                        Log.d(TAG, "Response from Server: "+line);
                         line = br.readLine();
                     }
                     br.close();
@@ -286,6 +288,7 @@ public class MainActivity extends AppCompatActivity
 
             return null;
         }
-    }
+
+    } // end Inner class
 
 } // end class

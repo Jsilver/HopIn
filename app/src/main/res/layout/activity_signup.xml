@@ -39,7 +39,10 @@
                 android:id="@+id/imageview_signup_app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_hopin_logo_c3" />
+                app:srcCompat="@drawable/ic_hopin_logo_d1"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:contentDescription="Logo for the HopIn app" />
 
             <TextView
                 android:id="@+id/textview_signup_title"
@@ -65,7 +68,6 @@
             <!-- Layout used to wrap the email ID and email suffix Views -->
             <LinearLayout
                 android:id="@+id/linearlayout_signup_wrapper_emailid"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -99,7 +101,8 @@
             <android.support.design.widget.TextInputLayout
                 android:textColorHint="@color/White"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/edittext_signup_password"

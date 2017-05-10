@@ -51,7 +51,7 @@
 
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/phone_button"
         style="@style/Widget.AppCompat.Button.Colored"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
         android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button"
+        android:layout_alignStart="@+id/phone_button"
         android:layout_alignTop="@+id/textView"
         android:background="#FFFFFF"
         android:ems="10"
@@ -100,7 +100,7 @@
         android:spinnerMode="dropdown"
         android:layout_alignBottom="@+id/textView4"
         android:layout_alignTop="@+id/textView4"
-        android:layout_alignStart="@+id/button"
+        android:layout_alignStart="@+id/phone_button"
         android:layout_alignEnd="@+id/editText3" />
 
 </RelativeLayout>
