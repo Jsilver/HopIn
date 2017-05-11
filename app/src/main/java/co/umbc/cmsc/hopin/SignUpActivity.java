@@ -205,7 +205,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
             URL url;
             String responseStr = "";
-            String requestURL = "http://10.200.54.39/hopinservice/api/v0/signup.php";
+            //String requestURL = "http://10.200.54.39/hopinservice/api/v0/signup.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"signup.php";
 
             try{
                 url = new URL(requestURL);

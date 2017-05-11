@@ -88,7 +88,10 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             URL url;
             String response = "";
 
-            String requestURL = "http://10.200.54.39/hopinservice/api/v0/phoneaddress.php";
+            //String requestURL = "http://10.200.54.39/hopinservice/api/v0/phoneaddress.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"phoneaddress.php";
+
             try
             {
                 url = new URL(requestURL);

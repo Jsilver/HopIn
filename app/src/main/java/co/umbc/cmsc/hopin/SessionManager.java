@@ -29,6 +29,9 @@ public class SessionManager {
     public static final String KEY_EMAIL      = "Email";
     public static final String KEY_PASSWORD   = "Password";
     public static final String KEY_ISLOGGEDIN = "IsLoggedIn";
+
+
+    public static final String KEY_SEATS = "seats";
     // perhaps include a key to store last login time.
 
     public SessionManager(Context context) {
@@ -75,6 +78,13 @@ public class SessionManager {
 
     }
 
+
+    public boolean setSeats(int value) {
+
+        mSharedPrefEditor.putInt(KEY_SEATS, value);  //set the user as logged in
+        return mSharedPrefEditor.commit(); // true; if user is set as logged in, then indicate that authentication was successful
+
+    }
 
     /**
      * Get Stored session data.
