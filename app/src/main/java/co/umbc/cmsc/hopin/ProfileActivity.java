@@ -3,12 +3,12 @@ package co.umbc.cmsc.hopin;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,14 +25,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     String user, u_email;
     EditText name, number, street, city, state, zip, model, specs, email, dri_ride, phone;
     Button back;
+    private final static String TAG = "ProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        user = getIntent().getStringExtra("Username");
-        u_email = getIntent().getStringExtra("Email");
+        user = new SessionManager(this).getUserDetailsAsObject().getUsername();
+        u_email = new SessionManager(this).getUserDetailsAsObject().getEmail();
+        Log.d("ProfileActivity", "email is: "+u_email);
+        //user = getIntent().getStringExtra("Username");
+        //u_email = getIntent().getStringExtra("Email");
 
         name = (EditText)findViewById(R.id.edit_name);
         number = (EditText)findViewById(R.id.edit_phone);
@@ -76,19 +80,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(s != null){
+                Log.d(TAG, "S value: "+s);
                 try {
                     JSONObject myjson = new JSONObject(s);
-                    JSONArray the_json_array = myjson.getJSONArray("users");
-                    email.setText(the_json_array.getString(0));
-                    name.setText(the_json_array.getString(1));
-                    street.setText(the_json_array.getString(2));
-                    city.setText(the_json_array.getString(3));
-                    state.setText(the_json_array.getString(4));
-                    zip.setText(the_json_array.getString(5));
-                    phone.setText(the_json_array.getString(6));
-                    model.setText(the_json_array.getString(7));
-                    specs.setText(the_json_array.getString(8));
-                    dri_ride.setText(the_json_array.getString(9));
+                    JSONObject myjsonUser = myjson.getJSONObject("users");
+                    //JSONArray the_json_array = myjson.getJSONArray("users");
+                    Log.d(TAG, "json obj : "+myjsonUser);
+                    email.setText(u_email);
+                    name.setText(myjsonUser.getString("fullname"));
+                    street.setText(myjsonUser.getString("street"));
+                    city.setText(myjsonUser.getString("city"));
+                    state.setText(myjsonUser.getString("state"));
+                    zip.setText(myjsonUser.getString("zipcode"));
+                    phone.setText(myjsonUser.getString("phone"));
+                    model.setText(myjsonUser.getString("vehicle_name"));
+                    specs.setText(myjsonUser.getString("vehicle_specs"));
+                    dri_ride.setText(myjsonUser.getString("driver_status"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -119,7 +126,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             /*
              * This part needs changing. Change the URL to where the php file is located.
              */
-            String requestURL = "http://10.200.11.250/hopin/ProfileActivity.php";
+            //String requestURL = "http://10.200.11.250/hopin/ProfileActivity.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"profileactivity.php";
             try
             {
                 url = new URL(requestURL);
