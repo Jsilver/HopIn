@@ -57,12 +57,13 @@
         android:layout_marginBottom="61dp" />
 
     <TextView
-        android:text="You have been selected by:"
+        android:id="@+id/textview_selected_driver_label"
+        android:text="Best Match to take you home:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:textColor="@color/White"
         android:textSize="22sp"
-        android:id="@+id/textview_selected_driver_label"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dp" />

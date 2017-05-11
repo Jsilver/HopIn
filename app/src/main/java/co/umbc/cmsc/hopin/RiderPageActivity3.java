@@ -81,11 +81,12 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
         mMap.moveCamera(CameraUpdateFactory.newLatLng(umbc));
 
         Timer timer=new Timer();
-        timer.schedule(new timeout(),1000,6000);
+        timer.schedule(new timeout(),UtilHelper.DELAY_FIRST_REFRESH,UtilHelper.REFRESH_RATE);
 
     }
 
     private class InvokeWebservice extends AsyncTask<String, Integer, String> {
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -141,14 +142,10 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
                     while (line != null) {
                         response += line;
                         line = br.readLine();
-
-
                     }
-
 
                     br.close();
                     return response;
-
 
                 }
                 myconnection.disconnect();
@@ -176,7 +173,7 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
                     LatLng driverloc = new LatLng(latitude2, longitude2);
                     mMap.addMarker(new MarkerOptions().position(driverloc).title(driver));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(driverloc));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(20), 2000, null);
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
 
                 } catch (JSONException e1) {
                     e1.printStackTrace();

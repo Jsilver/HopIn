@@ -90,7 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //otherwise, IllegalStateException of "TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 1000); // repeating every 60sec
+        timer.schedule(timerTask, UtilHelper.DELAY_FIRST_REFRESH, UtilHelper.REFRESH_RATE); // repeating every 60sec
     }
 
     /**
@@ -150,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //otherwise, IllegalStateException of TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, UtilHelper.DELAY_FIRST_REFRESH, UtilHelper.REFRESH_RATE);
     }
 
     @Override

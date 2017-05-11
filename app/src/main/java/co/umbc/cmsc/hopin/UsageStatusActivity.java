@@ -15,6 +15,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class UsageStatusActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "UsageStatusActivity: " ;
@@ -46,7 +54,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
     /**
      *  this will fetch information about the currently logged in user and update the class field for inclusion in the data sent to webservice.
      */
-    private String getLoggedInId() {
+    private String getLoggedInEmailId() {
         mUserDetails = mSessionManager.getUserDetailsAsObject();
 
         if (mUserDetails != null) {
@@ -64,7 +72,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
             case R.id.button_usage_status_confirm:  //selection confirmed.;
 
                 String[] input = new String[4]; // container for values to be passed to webservice
-                input[1] = this.getLoggedInId(); // set second param of input[] as userid
+                input[1] = this.getLoggedInEmailId(); // set second param of input[] as email address
 
                 int selectedValue = (int) spinnerUsageStatus.getSelectedItemId();
                 spinnerUsageStatus.getSelectedItem();
@@ -77,6 +85,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
                 } else
                 if (selectedValue == this.STATUS_DRIVER) {
                     input[0] = "setdriver";
+                    invokeWebService(input);
                     Intent intent = new Intent(getApplicationContext(), Seats.class);
                     startActivity(intent);
                 }
@@ -156,15 +165,19 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
         //input[0] = String.valueOf();
         //input[1] = this.userEmailId;
 
-        InvokeWebserviceTask myWebService = new InvokeWebserviceTask();
+        Log.d(TAG, "StatusSetterWebServiceCalled: ");
+        StatusSetterWebserviceTask myWebService = new StatusSetterWebserviceTask();
         myWebService.execute(input);
 
     }
 
-    private class InvokeWebserviceTask extends AsyncTask<String, Integer, String> {
+    private class StatusSetterWebserviceTask extends AsyncTask<String, Integer, String> {
+
+        URL url;
+        String responseStr = "";
 
         String baseURL = getString(R.string.domain_url);
-        String requestURL;
+        String requestURL = baseURL+"setusagestatus.php";
 
         /**
          * Override this method to perform a computation on a background thread. The specified parameters are the parameters passed to {@link #execute} by the caller of this task.
@@ -178,15 +191,57 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
          */
         @Override
         protected String doInBackground(String... params) {
-            switch (params[0]) {
-                case "getdrivers":
-                    requestURL = baseURL+"getdrivers.php";
-                    Log.d(TAG, requestURL);
-                    break;
-                case "getriders":
-                    requestURL = baseURL+"getdrivers.php";
-                    Log.d(TAG, requestURL);
-                    break;
+
+            String userStatus = params[0];      // usage status chosen
+            String loggedInEmailId = params[1]; // The user's email address
+
+            try{
+
+                // Simulate network access.
+                Thread.sleep(10);
+
+                url = new URL(requestURL);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(15000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                OutputStream outputStream = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+
+                StringBuilder str = new StringBuilder();
+                str.append("emailid="+loggedInEmailId+"&").append("status="+userStatus);
+
+                Log.d(TAG, "Status String: "+String.valueOf(str));
+
+                String stringParams = str.toString();
+                writer.write(stringParams);
+                writer.flush();
+                writer.close();
+
+                int responseCode = connection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line = " | ";
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    line = br.readLine();
+                    while (line != null) {
+                        responseStr += line;
+                        Log.d(TAG, "Response from Server:" + line);
+                        line = br.readLine();
+                    }
+                    br.close();
+
+                    return null;
+                    //return Boolean.valueOf(parseJsonResponse(responseStr)); // Converts boolean to Boolean.
+                }
+                connection.disconnect();
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
             return null;
         }

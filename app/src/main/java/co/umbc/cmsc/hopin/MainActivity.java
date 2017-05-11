@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -209,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
 
-        Toast.makeText(this, "Updating Location with: "+mCurrentLocation.getProvider(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Updating Location with: "+mCurrentLocation.getProvider(), Toast.LENGTH_LONG).show();
 
         //execute web service after updating inputs with current lat & lon
         invokeWebService();

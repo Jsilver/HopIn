@@ -112,8 +112,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             invalidInputsFlag = true;
         }
 
+        if (TextUtils.isEmpty(password)) {
+            mEdittextUsername.setError(getString(R.string.error_password_required));
+            focusView = mEdittextPassword;
+            invalidInputsFlag = true;
+        }
+
         if (!isPasswordValid(password)) {
-            mEdittextPassword.setError(getString(R.string.error_field_required));
+            mEdittextPassword.setError(getString(R.string.error_password_too_short));
             focusView = mEdittextPassword;
             invalidInputsFlag = true;
         }
@@ -269,7 +275,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     mSession.createNewSession(userDetails);
 
                     // Still pass this to Intent. Session info can be retrieved here as well as from SessionManager.
-                    mNavIntent = new Intent(getBaseContext(), UsageStatusActivity.class);
+                    mNavIntent = new Intent(getBaseContext(), PhoneActivity.class);
                     mNavIntent.putExtra("EXTRA_SESSION_NAME", mFullname); // index[2] == fullname
                     mNavIntent.putExtra("EXTRA_SESSION_EMAIL", mEmail);  // index[0] == email
                     return true;

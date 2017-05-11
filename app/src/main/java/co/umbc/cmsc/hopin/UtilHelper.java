@@ -12,6 +12,10 @@ import java.security.NoSuchAlgorithmException;
 
 public class UtilHelper {
 
+
+    public static final int DELAY_FIRST_REFRESH = 1000; // amount of time in milliseconds before first execution.
+    public static final int REFRESH_RATE = 15000; // refresh every 15 seconds
+
     public static String appendEmailSuffix( String username ) {
         String emailSuffix = "@umbc.edu";
         return new StringBuilder().append(username).append(emailSuffix).toString();
