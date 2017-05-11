@@ -163,6 +163,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
 
     private class InvokeWebserviceTask extends AsyncTask<String, Integer, String> {
 
+        String baseURL = getString(R.string.domain_url);
         String requestURL;
 
         /**
@@ -179,11 +180,11 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
         protected String doInBackground(String... params) {
             switch (params[0]) {
                 case "getdrivers":
-                    requestURL = "http://10.200.54.39/hopinservice/api/v0/getdrivers.php";
+                    requestURL = baseURL+"getdrivers.php";
                     Log.d(TAG, requestURL);
                     break;
                 case "getriders":
-                    requestURL = "http://10.200.54.39/hopinservice/api/v0/getdrivers.php";
+                    requestURL = baseURL+"getdrivers.php";
                     Log.d(TAG, requestURL);
                     break;
             }

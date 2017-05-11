@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="login"></activity>
+            android:label="login" />
         <activity
             android:name=".CarDetails"
             android:label="Vehicle Details" />
@@ -62,6 +62,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.umbc.cmsc.hopin.MainActivity" />
         </activity>
+        <activity android:name=".CurrentRiderActivity"></activity>
     </application>
 
 </manifest>

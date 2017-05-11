@@ -244,7 +244,9 @@ public class MainActivity extends AppCompatActivity
 
             URL url;
             String response = "";
-            String requestURL = "http://10.200.54.39/hopinservice/api/v0/postlocation.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"postlocation.php";
+            //String requestURL = "http://10.200.54.39/hopinservice/api/v0/postlocation.php";
 
             try{
                 url = new URL(requestURL);

@@ -206,7 +206,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         URL url;
         String responseStr = "";
-        String requestURL = "http://10.200.54.39/hopinservice/api/v0/signin.php";
+        String baseURL = getString(R.string.domain_url);
+        String requestURL = baseURL+"signin.php";
 
 
         private UserLoginTask(HashMap<String, String> userDetails) {

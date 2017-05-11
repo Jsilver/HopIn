@@ -1,10 +1,11 @@
 package co.umbc.cmsc.hopin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -14,7 +15,13 @@ import android.widget.Spinner;
 
 public class Seats extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String PREF_NAME = String.valueOf(R.string.auth_preference_file_key);
     Button buttonConfirm;
+    SessionManager msessionmanager;
+    private SharedPreferences sharedPreferences;
+    private String email;
+    private Spinner dropdown;
+    //int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,22 +31,29 @@ public class Seats extends AppCompatActivity implements View.OnClickListener {
         buttonConfirm = (Button) findViewById(R.id.button_seats_confirm);
         buttonConfirm.setOnClickListener(this);
 
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner_seats_dropdown);
-        String[] seats = new String[]{"","1", "2", "3","4","5","6"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, seats);
-        dropdown.setAdapter(adapter);
+        dropdown = (Spinner) findViewById(R.id.spinner_seats_dropdown);
+
+        sharedPreferences = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        email = sharedPreferences.getString(SessionManager.KEY_EMAIL,"");
+    }
+
+    private void createSeatsPref(int value){
+        sharedPreferences = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putInt("seats", value).commit();
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_seats_confirm:
+                createSeatsPref(Integer.valueOf(String.valueOf(dropdown.getSelectedItem())));
+
                 Intent intent = new Intent(this, MapsActivity.class);
-                intent.putExtra("userEmail",new SessionManager(getApplicationContext()).getUserDetailsAsObject().getEmail());
-                intent.putExtra("userFullName",new SessionManager(getApplicationContext()).getUserDetailsAsObject().getDisplayName());
+
+                intent.putExtra("userEmail",email);
+
                 startActivity(intent);
                 break;
         }
     }
-
 }
