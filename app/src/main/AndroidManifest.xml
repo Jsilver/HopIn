@@ -42,6 +42,7 @@
         <activity android:name=".AddressActivity" />
         <activity android:name=".UsageStatusActivity" />
         <activity android:name=".SignUpActivity" />
+		<activity android:name=".ProfileActivity"></activity>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
