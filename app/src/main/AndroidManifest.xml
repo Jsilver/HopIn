@@ -64,7 +64,9 @@
                 android:value="co.umbc.cmsc.hopin.MainActivity" />
         </activity>
         <activity android:name=".CurrentRiderActivity" />
-        <activity android:name=".RiderPageActivity"></activity>
+        <activity android:name=".RiderPageActivity" />
+        <activity android:name=".RiderPageActivity2" />
+        <activity android:name=".RiderPageActivity3"></activity>
     </application>
 
 </manifest>

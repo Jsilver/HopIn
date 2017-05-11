@@ -72,7 +72,7 @@ public class UsageStatusActivity extends AppCompatActivity implements View.OnCli
                 if (selectedValue == this.STATUS_RIDER) {
                     input[0] = "setrider";
                     invokeWebService(input);
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), RiderPageActivity.class);
                     startActivity(intent);
                 } else
                 if (selectedValue == this.STATUS_DRIVER) {

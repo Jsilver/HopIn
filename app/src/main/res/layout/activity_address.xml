@@ -50,7 +50,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="XX Y Street"
+            android:hint="Enter your address"
+            android:textColorHint="@color/White"
+            android:text=""
             android:textAlignment="center"
             android:textColor="@color/White"
             android:layout_weight="0.84" />
@@ -80,7 +82,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Pasadena"
+            android:text=""
+            android:hint="Your city"
+            android:textColorHint="@color/White"
             android:textAlignment="center"
             android:textColor="@color/White" />
 
@@ -109,7 +113,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Maryland"
+            android:text="MD"
             android:textAlignment="center"
             android:textColor="@color/White" />
 
@@ -138,7 +142,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="91101"
+            android:text="21101"
             android:textAlignment="center"
             android:textColor="@color/White" />
 

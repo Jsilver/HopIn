@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     public String userEmailId = "dummy@example.com";
     public String userFullName = "LoggedInUserPlaceholder";
 
-    public static final int MIN_TIME = 60000;  // measured in milliseconds, should be set to 60 seconds
+    public static final int MIN_TIME = 10000;  // measured in milliseconds, should be set to 60 seconds
     public static final int MIN_DISTANCE = 1;  // measured in meters
 
     private LocationManager mLocationManager;

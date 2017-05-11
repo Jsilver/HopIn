@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,12 +79,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if(s != null){
-                Log.d(TAG, "S value: "+s);
+                //Log.d(TAG, "S value: "+s);
                 try {
                     JSONObject myjson = new JSONObject(s);
                     JSONObject myjsonUser = myjson.getJSONObject("users");
                     //JSONArray the_json_array = myjson.getJSONArray("users");
-                    Log.d(TAG, "json obj : "+myjsonUser);
+                    //Log.d(TAG, "json obj : "+myjsonUser);
                     email.setText(u_email);
                     name.setText(myjsonUser.getString("fullname"));
                     street.setText(myjsonUser.getString("street"));
@@ -100,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                 /*
                  * Change the code below to start the next Intent
                  */
@@ -108,7 +107,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 //startActivity(AddressIntent);
             }
             else {
-                Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
             }
         }
 
