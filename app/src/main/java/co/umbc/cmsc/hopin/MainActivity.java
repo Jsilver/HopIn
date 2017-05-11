@@ -176,7 +176,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_address) {
+        if (id == R.id.nav_profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_address) {
             Intent intent = new Intent(this, AddressActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_phone) {
