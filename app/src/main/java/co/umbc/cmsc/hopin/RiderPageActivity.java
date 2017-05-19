@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,7 +39,7 @@ public class RiderPageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loggedInUsername= new SessionManager(getBaseContext()).getUserDetailsAsObject().getUsername();
         input[0]=loggedInUsername;
-        Toast.makeText(getApplicationContext(),input[0], Toast.LENGTH_LONG).show();
+       // Toast.makeText(getApplicationContext(),input[0], Toast.LENGTH_LONG).show();
 
         InvokeWebservice mywebservice = new InvokeWebservice();
         mywebservice.execute(input);
@@ -125,7 +124,7 @@ public class RiderPageActivity extends AppCompatActivity {
                 //String error=jObject.getString("username");
 
                 String code2=jObject.getString("selected");
-                Toast.makeText(getApplicationContext(),code2, Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(),code2, Toast.LENGTH_LONG).show();
 
                 // if selected, then grab driver details...
                 if(code2.equals("1"))

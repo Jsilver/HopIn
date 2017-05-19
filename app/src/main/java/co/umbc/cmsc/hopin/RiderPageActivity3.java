@@ -2,8 +2,8 @@ package co.umbc.cmsc.hopin;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -107,7 +107,7 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
 
             //String requestURL = "http://10.200.61.136/hopinservice/api/v0/getdriverloc.php";
             String baseURL = getString(R.string.domain_url);
-            String requestURL = baseURL+"driverloc.php";
+            String requestURL = baseURL+"getdriverloc.php";
 
             try {
                 url = new URL(requestURL);
@@ -160,7 +160,6 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
 
             if (isMapReady) {
                 try {
-
                     mMap.clear();
                     Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     JSONObject jObject = new JSONObject(response);
@@ -171,6 +170,7 @@ public class RiderPageActivity3 extends FragmentActivity implements OnMapReadyCa
                     longitude2 = Double.parseDouble(longitude);
                     //String error=jObject.getString("username");
                     LatLng driverloc = new LatLng(latitude2, longitude2);
+
                     mMap.addMarker(new MarkerOptions().position(driverloc).title(driver));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(driverloc));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(14), 2000, null);
