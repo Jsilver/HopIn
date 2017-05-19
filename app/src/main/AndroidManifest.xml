@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="login"></activity>
+            android:label="login" />
         <activity
             android:name=".CarDetails"
             android:label="Vehicle Details" />
@@ -42,7 +42,7 @@
         <activity android:name=".AddressActivity" />
         <activity android:name=".UsageStatusActivity" />
         <activity android:name=".SignUpActivity" />
-		<activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -63,6 +63,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.umbc.cmsc.hopin.MainActivity" />
         </activity>
+        <activity android:name=".CurrentRiderActivity" />
+        <activity android:name=".RiderPageActivity" />
+        <activity android:name=".RiderPageActivity2" />
+        <activity android:name=".RiderPageActivity3"></activity>
     </application>
 
 </manifest>

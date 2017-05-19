@@ -1,5 +1,6 @@
 package co.umbc.cmsc.hopin;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,13 +27,16 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+
         phone = getIntent().getStringExtra("Phone");
         username = getIntent().getStringExtra("Username");
         email = getIntent().getStringExtra("Email");
+
         street = (EditText)findViewById(R.id.edittext_street);
         city = (EditText)findViewById(R.id.edittext_city);
         state = (EditText)findViewById(R.id.edittext_state);
         zip = (EditText)findViewById(R.id.edittext_zipcode);
+
         confirm = (Button)findViewById(R.id.button_address_confirm);
         confirm.setOnClickListener(this);
     }
@@ -69,8 +73,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                 /*
                  * Change the code below to start the next Intent
                  */
-                //Intent AddressIntent = new Intent(AddressActivity.this, AddressActivity.class);
-                //startActivity(AddressIntent);
+                Intent nextPageIntent = new Intent(AddressActivity.this, UsageStatusActivity.class);
+                startActivity(nextPageIntent);
             }
             else {
                 Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
@@ -88,7 +92,10 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             URL url;
             String response = "";
 
-            String requestURL = "http://10.200.54.39/hopinservice/api/v0/phoneaddress.php";
+            //String requestURL = "http://10.200.54.39/hopinservice/api/v0/phoneaddress.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"phoneaddress.php";
+
             try
             {
                 url = new URL(requestURL);

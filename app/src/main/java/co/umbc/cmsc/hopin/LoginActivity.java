@@ -120,21 +120,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         boolean invalidCredentialsFlag = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!isPasswordValid(password)) {
-            mEdittextPassword.setError(getString(R.string.error_invalid_password));
-            focusView = mEdittextPassword;
-            invalidCredentialsFlag = true;
-        }
-
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(username)) {
             mEdittextUserId.setError(getString(R.string.error_field_required));
             focusView = mEdittextUserId;
             invalidCredentialsFlag = true;
-        } else if (!isEmailValid(email)) {
+        }
+        if (!isEmailValid(email)) {
             mEdittextUserId.setError(getString(R.string.error_invalid_email));
             focusView = mEdittextUserId;
+            invalidCredentialsFlag = true;
+        }
+
+        // Check for a valid password, if the user entered one.
+        if (!isPasswordValid(password)) {
+            mEdittextPassword.setError(getString(R.string.error_password_too_short));
+            focusView = mEdittextPassword;
             invalidCredentialsFlag = true;
         }
 
@@ -206,7 +207,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         URL url;
         String responseStr = "";
-        String requestURL = "http://10.200.54.39/hopinservice/api/v0/signin.php";
+        String baseURL = getString(R.string.domain_url);
+        String requestURL = baseURL+"signin.php";
 
 
         private UserLoginTask(HashMap<String, String> userDetails) {

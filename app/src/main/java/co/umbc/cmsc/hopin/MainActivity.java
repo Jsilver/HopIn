@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     public String userEmailId = "dummy@example.com";
     public String userFullName = "LoggedInUserPlaceholder";
 
-    public static final int MIN_TIME = 60000;  // measured in milliseconds, should be set to 60 seconds
+    public static final int MIN_TIME = 10000;  // measured in milliseconds, should be set to 60 seconds
     public static final int MIN_DISTANCE = 1;  // measured in meters
 
     private LocationManager mLocationManager;
@@ -176,7 +175,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_address) {
+        if (id == R.id.nav_profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_address) {
             Intent intent = new Intent(this, AddressActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_phone) {
@@ -206,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
 
-        Toast.makeText(this, "Updating Location with: "+mCurrentLocation.getProvider(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Updating Location with: "+mCurrentLocation.getProvider(), Toast.LENGTH_LONG).show();
 
         //execute web service after updating inputs with current lat & lon
         invokeWebService();
@@ -244,7 +246,9 @@ public class MainActivity extends AppCompatActivity
 
             URL url;
             String response = "";
-            String requestURL = "http://10.200.54.39/hopinservice/api/v0/postlocation.php";
+            String baseURL = getString(R.string.domain_url);
+            String requestURL = baseURL+"postlocation.php";
+            //String requestURL = "http://10.200.54.39/hopinservice/api/v0/postlocation.php";
 
             try{
                 url = new URL(requestURL);

@@ -29,7 +29,9 @@ public class CallWebServiceTask extends AsyncTask<String, Integer, String> {
 
         switch (params[0]) {
             case "getdrivers":
-                String requestURL = "http://10.200.54.39/hopinservice/api/v0/setdriver.php";
+                //String requestURL = "http://10.200.54.39/hopinservice/api/v0/setdriver.php";
+                String baseURL = String.valueOf(R.string.domain_url);
+                String requestURL = baseURL+"getdrivers.php";
 
                 break;
             case "getriders":

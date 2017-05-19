@@ -1,17 +1,23 @@
 package co.umbc.cmsc.hopin;
 
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,15 +49,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     double latitude, longitude;
     boolean bound = false, animate; private static boolean DEBUG = true;
+    List<Riders> ridersList;
 
     int success;
     String userEmail;
 
     private static final String TAG = "MapsActivity";
-    private String baseURL;
+    private static String baseURL = String.valueOf(R.string.domain_url);
+    private static final String PREF_NAME = String.valueOf(R.string.auth_preference_file_key);
 
     Timer timer;
     GetUpdatedFriendsTimer timerTask;
+    Button btn_map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +78,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Intent intent = getIntent();
         userEmail = intent.getStringExtra("userEmail");
+        btn_map = (Button) findViewById(R.id.buttonMap);
+        btn_map.setOnClickListener(this);
 
-        if (timer != null) {
+
+        if(timer != null){
             timer.cancel();
         }
 
@@ -78,9 +90,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //otherwise, IllegalStateException of "TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 60000); // repeating every 5sec
+        timer.schedule(timerTask, UtilHelper.DELAY_FIRST_REFRESH, UtilHelper.REFRESH_RATE); // repeating every 60sec
     }
-
 
     /**
      * Manipulates the map once available.
@@ -139,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //otherwise, IllegalStateException of TimerTask is scheduled already" will be thrown
         timer = new Timer();
         timerTask = new GetUpdatedFriendsTimer();
-        timer.schedule(timerTask, 1000, 60000);
+        timer.schedule(timerTask, UtilHelper.DELAY_FIRST_REFRESH, UtilHelper.REFRESH_RATE);
     }
 
     @Override
@@ -163,9 +174,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.buttonMap:
-                Intent intent = new Intent(this, CurrentRiders.class);
-                startActivity(intent);
+                int seats = getSeats();
+                if(seats == 0){
+                    Toast.makeText(this,"Select the number of riders",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    if(ridersList == null || ridersList.size() < 1)
+                    {
+                        Toast.makeText(this,"There are no riders",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Intent intent = new Intent(this, CurrentRiderActivity.class) ;
+                        intent.putParcelableArrayListExtra("ridersList",(ArrayList<? extends Parcelable>) ridersList);
+                        intent.putExtra("seats",seats);
+                        startActivity(intent);
+                    }
+
+                }
+
+                break;
+
         }
+    }
+
+    private int getSeats() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        int seats = sharedPreferences.getInt("seats",0);
+
+        return seats;
     }
 
     class GetUpdatedFriendsTimer extends TimerTask {
@@ -195,14 +231,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private class InvokeWebService extends AsyncTask<String,Integer,List<Rider>> {
+    private class InvokeWebService extends AsyncTask<String,Integer,List<Riders>> {
 
         @Override
-        protected List<Rider> doInBackground(String... params) {
+        protected List<Riders> doInBackground(String... params) {
             URL url;
             String response = "";
             String requestURL = baseURL + "updaterider.php?";
-            List<Rider> ridersList = new ArrayList<Rider>();
+            List<Riders> ridersList = new ArrayList<Riders>();
             try
             {
                 url = new URL(requestURL);
@@ -253,7 +289,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         for(int i=0;i<friends.length();i++){
 
                             JSONObject friend = friends.getJSONObject(i);
-                            Rider person = new Rider(friend.getString("name"),friend.getDouble("latitude"),friend.getDouble("longitude"));
+                            Riders person = new Riders(friend.getString("name"),friend.getDouble("latitude"),friend.getDouble("longitude"));
                             ridersList.add(person);
                         }
 
@@ -274,14 +310,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         @Override
-        protected void onPostExecute(List<Rider> riders) {
+        protected void onPostExecute(List<Riders> riders) {
             super.onPostExecute(riders);
+            ridersList = riders;
             displayAllRiders(riders);
         }
 
     }
 
-    public void displayAllRiders(List<Rider> ridersList) {
+    public void displayAllRiders(List<Riders> ridersList) {
 
         if (DEBUG) { Log.d(TAG, "onPostExecute() called: displayAllRiders"); }
         if (bound == true) {
@@ -303,8 +340,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             if (DEBUG) { Log.d(TAG, "ridersList"+ridersList.toString()); }
             // At this point, the logged in riders (obtained from web-service) are added to the map
-            for(Rider riders : ridersList) {
+            for(Riders riders : ridersList) {
                 LatLng userLocation = new LatLng(riders.getLatitude(), riders.getLongitude());
+
                 mMap.addMarker(new MarkerOptions().position(userLocation).title(riders.name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             } // end for
         }

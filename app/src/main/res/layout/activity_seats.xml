@@ -25,6 +25,7 @@
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
         android:layout_below="@+id/textview_seats_label"
+        android:entries="@array/seats_array"
         android:layout_centerHorizontal="true" />
 
     <Button

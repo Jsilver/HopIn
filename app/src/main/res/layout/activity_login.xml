@@ -47,7 +47,7 @@
                 android:id="@+id/imageview_login_app_icon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_hopin_logo_d1git" />
+                app:srcCompat="@drawable/ic_hopin_logo_d1" />
 
             <!-- Layout used to wrap the email ID and email suffix Views -->
             <LinearLayout

@@ -9,11 +9,12 @@
     <string name="prompt_password_signup">Enter A Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Sign me Up!</string>
-    <string name="action_sign_up_short">Sign Up</string>
+    <string name="action_sign_up_short">Sign Up Here -> </string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_password_too_short">Your password must be 8 characters or more</string>
     <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_password_required">A password is required!</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_signup_fail">Sign up failed, perhaps username is already used.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
@@ -26,6 +27,18 @@
         <item>Choose: </item>
         <item> Driver </item>
         <item> Rider </item>
+    </string-array>
+
+    <string-array name="seats_array">
+        <item> </item>
+        <item> 1 </item>
+        <item> 2 </item>
+        <item> 3 </item>
+        <item> 4 </item>
+        <item> 5 </item>
+        <item> 6 </item>
+        <item> 7 </item>
+        <item> 8 </item>
     </string-array>
 
     <!-- Shared Preference File used by the Basic Auth Mechanism -->
@@ -42,6 +55,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map Location</string>
 
-    <string name="domain_url">http://10.200.54.39/hopinservice/api/v0/</string>
+    <string name="domain_url_local">http://10.200.61.136/hopinservice/api/v0/</string>
+    <string name="domain_url">https://hopin.000webhostapp.com/api/v0/</string>
 
 </resources>
